@@ -31,9 +31,15 @@ module.exports = function(grunt) {
       },
       build: {
         files: {
-          'dist/js/magic.min.js': ['src/js/magic.js', 'src/js/magic2.js']
+          'dist/js/magic.min.js': 'src/js/magic.js'
         }
       }
+      // dev: {
+      //   files: {'dist/js/magic.min.js':['src/js/magic.js','src/js/magic2.js']}
+      // },
+      // production {
+      //   files: {'dist/js/magic.min.js':'src/**/*.js'}
+      // }
     },
 
     // compile less stylesheets to css -----------------------------------------
@@ -55,8 +61,19 @@ module.exports = function(grunt) {
           'dist/css/style.min.css': 'src/css/style.css'
         }
       }
-    }
+    },
 
+    // configure watch to auto update ------------------------------------------
+    watch: {
+      stylesheets: {
+        files: ['src/**/*.css', 'src/**/*.less'],
+        tasks: ['less', 'cssmin']
+      },
+      scripts: {
+        files: 'src/**/*.js',
+        tasks: ['jshint', 'uglify']
+      }
+    }
 
   });
 
@@ -72,6 +89,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // ============= // CREATE TASKS ========== //
+  // the default task will go through all configuration (dev and production) in each task
   grunt.registerTask('default', ['jshint', 'uglify', 'cssmin', 'less']);
+  //
+  // // this task will only run the dev configuration
+  // grunt.registerTask('dev', ['jshint','uglify:dev','cssmin','less']);
+  //
+  // // this only run production configuration
+  // grunt.registerTask('production', ['jshint','uglify:production','cssmin','less']);
 
 };
